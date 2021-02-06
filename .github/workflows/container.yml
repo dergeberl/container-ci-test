@@ -3,8 +3,10 @@ name: build-container
 on:
   release:
     types: [published]
-#    branches: 
-#    - main
+  push:
+    branches:
+    - main q
+
 jobs:
   build:
     runs-on: ubuntu-latest
