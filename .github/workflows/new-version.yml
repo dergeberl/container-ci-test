@@ -3,9 +3,12 @@ name: new version
 on:
   schedule:
   - cron:  '*/10 * * * *'
+  push:
+    branches: 
+    - main
 
 jobs:
-  build:
+  new-tag:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
