@@ -2,10 +2,13 @@ name: build-container
 
 on:
   push:
+    tags:
+      - v*
+  create:
+    tags:
+      - v*
 #    branches: 
 #    - main
-    tags:
-      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
