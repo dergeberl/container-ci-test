@@ -40,5 +40,5 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
-            sha: ${{ steps.tagcommitsha.outputs.sha }}
+            sha: "${{ steps.tagcommitsha.outputs.sha }}"
           })
