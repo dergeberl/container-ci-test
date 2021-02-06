@@ -31,32 +31,25 @@ jobs:
         version: ${{ steps.previoustag.outputs.tag }}
     - name: New Version
       run: echo v${{ steps.semvers.outputs.patch }}
-    - name: Bump version and push tag
-      id: tag_version
-      uses: mathieudutour/github-tag-action@v5.1
+    - name: Create tag
+      uses: actions/github-script@v3
       with:
-        custom_tag: ${{ steps.semvers.outputs.patch }}
-        github_token: ${{ secrets.REGISTRY }}
-        create_annotated_tag: true
-#    - name: Create tag
-#      uses: actions/github-script@v3
-#      with:
-#        github-token: ${{ secrets.REGISTRY }}
-#        script: |
-#          github.git.createRef({
-#            owner: context.repo.owner,
-#            repo: context.repo.repo,
-#            ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
-#            sha: "${{ steps.tagcommitsha.outputs.sha }}"
-#          })
-#    - name: Create Release
-#      uses: actions/create-release@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: v${{ steps.semvers.outputs.patch }}
-#        release_name: Release v${{ steps.semvers.outputs.patch }}
-#        body: |
-#          v${{ steps.semvers.outputs.patch }}
-#        draft: false
-#        prerelease: false
+        github-token: ${{ secrets.REGISTRY }}
+        script: |
+          github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
+            sha: "${{ steps.tagcommitsha.outputs.sha }}"
+          })
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.semvers.outputs.patch }}
+        release_name: Release v${{ steps.semvers.outputs.patch }}
+        body: |
+          v${{ steps.semvers.outputs.patch }}
+        draft: false
+        prerelease: false
