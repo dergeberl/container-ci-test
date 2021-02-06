@@ -9,11 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: 'Get Previous tag'
+    - name: Get Previous tag
       id: previoustag
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: checkout tag
       uses: actions/checkout@v2
       with:
@@ -25,3 +23,14 @@ jobs:
         version: ${{ steps.previoustag.outputs.tag }}
     - name: New Version
       run: echo ${{ steps.semvers.outputs.patch }}
+    - name: Create tag
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/tags/${{ steps.semvers.outputs.patch }}",
+            sha: context.sha
+          })
